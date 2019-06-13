@@ -2,52 +2,23 @@
 
 ## Time Estimate
 
-Lab 07 Feature 00 - Improvements
-
-Estimate of time needed to complete: 30 minutes
-
-Start time: 9:40am
-
-Finish time: 10:00am
-
-Actual time needed to complete: 20 minutes
------
-Lab 07 Feature 1 - Data formatting
-
-Estimate of time needed to complete: 15 minutes
-
-Start time: 10:20am
-
-Finish time: 10:40am
-
-Actual time needed to complete: 20 minutes
------
-Lab 07 Feature 2 - API
+Lab 08 Feature 1 - Database Setup
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 10:40am
+Start time: 9:30am
 
-Finish time: 1:20pm
+Finish time: 
 
-Actual time needed to complete: 1.5 hour
+Actual time needed to complete: 
 -----
-Lab 07 Feature 3 - EventBrite
 
-Estimate of time needed to complete: 1 hour
-
-Start time: 1:20pm
-
-Finish time: 1:45pm 
-
-Actual time needed to complete: Did not complete
------
 
 
 **Authors**
 
 * **Joanna Arroyo** - [GitHub Profile](https://github.com/joannaarroyo)
-* **Evan BC** - [GitHub Profile](https://github.com/EvanBC1)
+* **Raven Robertson** - [GitHub Profile](https://github.com/ravewillow6383)
 
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 

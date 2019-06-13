@@ -7,6 +7,13 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const superagent = require('superagent');
+const pg = require('pg');
+
+// Database Setup
+const client = new pg.Client(process.env.DATABASE_URL);
+// console.log(client);
+client.connect();
+client.on('error', error => console.error(error));
 
 // Application Setup
 const PORT = process.env.PORT;
@@ -17,6 +24,7 @@ app.use(cors());
 app.get('/location', handleLocation);
 app.get('/weather', handleWeather);
 app.get('/events', handleEvents);
+app.get('/test', (request, response) => response.send('hi there'));
 
 // Route Handlers
 function handleLocation(request, response){
@@ -38,13 +46,38 @@ function handleEvents(request, response){
 }
 
 function getLocation(query){
-  const URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.GEOCODE_API_KEY}`;
-  return superagent.get(URL)
-    .then(response => {
-      let location = new Location(query, response.body.results[0]);
-      return location;
+  const sql = `SELECT * FROM locations WHERE search_query='${query}'`;
+  return client.query(sql).then( () => 'woohoo').catch( () => console.error('ouch'));
+}
+
+function xxxxgetLocation(query){
+  const sql = `SELECT * FROM locations WHERE search_query='${query}'`;
+  // return 'getting location';
+
+  // console.log(sql);
+  return client.query(sql)
+    .then(results => {
+      console.log('............db search complete');
+      if (results.rowCount > 0){
+        console.log('........ from cache');
+        return results.rowCount;
+      } else {
+        const URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.GEOCODE_API_KEY}`;
+        return superagent.get(URL)
+          .then(response => {
+            let location = new Location(query, response.body.results[0]);
+            const insertSQL = `INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ('${location.search_query}', '${location.formatted_query}', ${location.latitude}, ${location.longitude});`;
+            return client.query(insertSQL)
+              .then(results => {
+                console.log('insert status', results.rows);
+                console.log('........ from api and cached');
+                return location;
+              })
+              .catch(error => console.error(error));
+          })
+          .catch(error => console.error(error));
+      }
     })
-    .catch(error => console.error(error));
 }
 
 function getWeather(query){
