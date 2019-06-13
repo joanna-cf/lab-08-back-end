@@ -1,8 +1,5 @@
 'use strict';
 
-//Variables
-let location;
-
 // Load Environment Variable from the .env file
 require('dotenv').config();
 
