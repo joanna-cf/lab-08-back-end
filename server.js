@@ -7,6 +7,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const superagent = require('superagent');
+const pg = require('pg');
+
+// database setup
+const client = new pg.Client(process.env.DATABASE_URL);
+client.connect();
+client.on('error', error => console.error(error));
 
 // Application Setup
 const PORT = process.env.PORT;
@@ -25,7 +31,7 @@ const getEvents = require('./js/events');
 
 // Route Handlers
 function handleLocation(request, response){
-  getLocation(request.query.data, superagent)
+  getLocation(request.query.data, client, superagent)
     .then(location => response.send(location))
     .catch(error => handleError(error, response));
 }
