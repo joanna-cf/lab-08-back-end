@@ -20,6 +20,7 @@ app.get('/events', handleEvents);
 
 // internal modules
 const getLocation = require('./js/location');
+const getWeather = require('./js/weather');
 
 // Route Handlers
 function handleLocation(request, response){
@@ -29,7 +30,7 @@ function handleLocation(request, response){
 }
 
 function handleWeather(request, response){
-  getWeather(request.query)
+  getWeather(request.query, superagent)
     .then(weather => response.send(weather))
     .catch(error => handleError(error, response))
 }
@@ -38,14 +39,6 @@ function handleEvents(request, response){
   getEvents(request.query)
     .then(data => response.send(data))
     .catch(error => handleError(error));
-}
-
-
-function getWeather(query){
-  const URL = `https://api.darksky.net/forecast/${process.env.WEATHER_API_KEY}/${query.data.latitude},${query.data.longitude}`;
-  return superagent.get(URL)
-    .then(response => response.body.daily.data.map(day => new Weather(day)))
-    .catch(error => console.error(error));
 }
 
 function getEvents(query){
@@ -57,12 +50,6 @@ function getEvents(query){
 }
 
 // Constructor Functions
-
-function Weather(darkSkyData){
-  this.forecast = darkSkyData.summary;
-  this.time = new Date(darkSkyData.time * 1000).toDateString();
-}
-
 function Event(event){
   this.link = event.url,
   this.name = event.name.txt,
